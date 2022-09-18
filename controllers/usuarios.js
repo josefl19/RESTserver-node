@@ -1,4 +1,7 @@
 import { response } from "express";
+import bcryptjs from "bcryptjs";
+
+import Usuario from '../models/usuario.js';
 
 // get
 const usuariosGet = (req, res = response) => {
@@ -11,13 +14,20 @@ const usuariosGet = (req, res = response) => {
 }
 
 // post
-const usuariosPost = (req, res = response) => {
-    const { nombre, edad } = req.body;
+const usuariosPost = async (req, res = response) => {
+    const { nombre, correo, password, rol } = req.body;
+    const usuario = new Usuario( { nombre, correo, password, rol } );            // Creacion de la instancia
+
+    // Encriptar la contraseña
+    const salt = bcryptjs.genSaltSync();                        // Salt. Numero de vueltas para hacer más segura la contraseña. Default: 10
+    usuario.password = bcryptjs.hashSync(password, salt);       // Se encirpta la contraseña con el salt
+
+    //Grabar registro
+    await usuario.save();
     
     res.json({
         msg: "post API - controller",
-        nombre,
-        edad
+        usuario
     });
 }
 

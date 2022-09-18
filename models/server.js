@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors";
 
 import { router } from "../routes/user.js";
+import { dbConnection } from "../database/config.js";
 
 class Server {
 
@@ -10,11 +11,18 @@ class Server {
         this.port = process.env.PORT;
         this.usuariosPath = '/api/users';
 
+        // Conexión a base de datos (mongo)
+        this.conectarBD();
+
         // Middlewares
-        this.middlewares()
+        this.middlewares();
 
         // Rutas de aplicación
         this.routes();
+    }
+
+    async conectarBD() {
+        await dbConnection();
     }
 
     middlewares() {

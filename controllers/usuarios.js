@@ -70,9 +70,17 @@ const usuariosPatch = (req, res = response) => {
 }
 
 // delete
-const usuariosDelete = (req, res) => {
+const usuariosDelete = async (req, res) => {
+    const { id } = req.params;
+
+    // Borrado fisico
+    // const usuario = await Usuario.findByIdAndDelete(id);
+
+    // Cambiar estado del usuario (recomendado para mantener las referencias)
+    const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
+
     res.json({
-        msg: "delete API - controller"
+        usuario
     });
 }
 

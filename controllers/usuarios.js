@@ -72,15 +72,18 @@ const usuariosPatch = (req, res = response) => {
 // delete
 const usuariosDelete = async (req, res) => {
     const { id } = req.params;
+    const uid = req.uid;                // Viene desde el controller de validar-jwt
 
     // Borrado fisico
     // const usuario = await Usuario.findByIdAndDelete(id);
 
     // Cambiar estado del usuario (recomendado para mantener las referencias)
     const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
+    //const usuarioAuth = req.usuarioAuth;
 
     res.json({
-        usuario
+        usuario,
+        //usuarioAuth
     });
 }
 

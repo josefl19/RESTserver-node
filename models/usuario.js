@@ -34,7 +34,8 @@ const UsuarioSchema = Schema({
 
 // Sobreescritura del método toJSON para quitar campos de la impresión mostrada en la respuesta
 UsuarioSchema.methods.toJSON = function() {
-    const { __v, password, ...usuario } = this.toObject();              // Instancia actual
+    const { __v, password, _id, ...usuario } = this.toObject();              // Instancia actual
+    usuario.uid = _id;
     return usuario;
 }
 

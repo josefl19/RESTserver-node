@@ -3,6 +3,8 @@ import { check } from "express-validator";
 
 import { usuariosDelete, usuariosGet, usuariosPatch, usuariosPost, usuariosPut } from "../controllers/usuarios.js";
 import { emailExiste, esRolValido, existeIDUsuario } from "../helpers/db-validators.js";
+import { validarJWT } from "../middlewares/validar-jwt.js";
+import { esAdminRole, tieneRole } from "../middlewares/validar-roles.js";
 import { validarCampos } from "../middlewares/validarCampos.js";
 
 const router = Router();
@@ -28,6 +30,9 @@ router.post('/', [
 router.patch('/', usuariosPatch);
 
 router.delete('/:id', [
+        validarJWT,
+        //esAdminRole,
+        tieneRole('ADMIN_ROLE', 'VENTAS_ROLE'),
         check('id', 'No es un ID válido').isMongoId(),
         check('id').custom( existeIDUsuario ),
         validarCampos

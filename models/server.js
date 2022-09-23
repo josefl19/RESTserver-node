@@ -3,6 +3,7 @@ import cors from "cors";
 
 import { router } from "../routes/user.js";
 import { dbConnection } from "../database/config.js";
+import { routerAuth } from "../routes/auth.js";
 
 class Server {
 
@@ -10,6 +11,7 @@ class Server {
         this.app = express();
         this.port = process.env.PORT;
         this.usuariosPath = '/api/users';
+        this.authPath = '/api/auth';
 
         // Conexión a base de datos (mongo)
         this.conectarBD();
@@ -38,6 +40,7 @@ class Server {
 
     routes() {
         this.app.use(this.usuariosPath, router);
+        this.app.use(this.authPath, routerAuth);
     }
 
     listen() {

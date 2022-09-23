@@ -8,6 +8,9 @@
 </head>
 <body>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <h3>Google Sign-in</h3>
+
     <div id="g_id_onload"
          data-client_id="84016955149-jtsvmsarpt7p6morrc3d2sff63va64vv.apps.googleusercontent.com"
          data-auto_prompt="false"
@@ -22,7 +25,7 @@
          data-logo_alignment="left">
       </div>
 
-    <h3>Google Sign-in</h3>
+      <button id="google-signOut"> Sign Out </button>
 
     <script>
         function handleCredentialResponse(response) {
@@ -41,9 +44,23 @@
                 .then( resp => resp.json() )        //Serializar el readable stream
                 .then( resp => {
                     console.log( resp )
+                    localStorage.setItem('email', resp.usuario.correo)          // Almacenar localmente el correo para realizar el Sign Out
                 })
                 .catch( console.warn );
         }
+
+        const button = document.getElementById("google-signOut");
+        button.onclick = () => {
+            console.log( google.accounts.id );
+            google.accounts.id.disableAutoSelect();
+
+            // Sign out. Revocar mediante el correo almacenado localmente, se borra el registro y se recarga la página
+            google.accounts.id.revoke( localStorage.getItem('email'), done => {
+                localStorage.clear();
+                location.reload();
+            });
+        }
+
       </script>
       
 </body>

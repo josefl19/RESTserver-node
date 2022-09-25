@@ -4,14 +4,19 @@ import cors from "cors";
 import { router } from "../routes/user.js";
 import { dbConnection } from "../database/config.js";
 import { routerAuth } from "../routes/auth.js";
+import { routerCategorias } from "../routes/categorias.js";
 
 class Server {
 
     constructor() {
         this.app = express();
         this.port = process.env.PORT;
-        this.usuariosPath = '/api/users';
-        this.authPath = '/api/auth';
+
+        this.paths = {
+            usuariosPath: '/api/users',
+            authPath: '/api/auth',
+            authCategoria: '/api/categorias'
+        }
 
         // Conexión a base de datos (mongo)
         this.conectarBD();
@@ -39,8 +44,9 @@ class Server {
     }
 
     routes() {
-        this.app.use(this.usuariosPath, router);
-        this.app.use(this.authPath, routerAuth);
+        this.app.use(this.paths.usuariosPath, router);
+        this.app.use(this.paths.authPath, routerAuth);
+        this.app.use(this.paths.authCategoria, routerCategorias);
     }
 
     listen() {

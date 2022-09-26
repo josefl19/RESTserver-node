@@ -5,6 +5,7 @@ import { router } from "../routes/user.js";
 import { dbConnection } from "../database/config.js";
 import { routerAuth } from "../routes/auth.js";
 import { routerCategorias } from "../routes/categorias.js";
+import { routerProductos } from "../routes/productos.js";
 
 class Server {
 
@@ -15,7 +16,8 @@ class Server {
         this.paths = {
             usuariosPath: '/api/users',
             authPath: '/api/auth',
-            authCategoria: '/api/categorias'
+            categoriasPath: '/api/categorias',
+            productosPath: '/api/productos'
         }
 
         // Conexión a base de datos (mongo)
@@ -46,7 +48,8 @@ class Server {
     routes() {
         this.app.use(this.paths.usuariosPath, router);
         this.app.use(this.paths.authPath, routerAuth);
-        this.app.use(this.paths.authCategoria, routerCategorias);
+        this.app.use(this.paths.categoriasPath, routerCategorias);
+        this.app.use(this.paths.productosPath, routerProductos);
     }
 
     listen() {

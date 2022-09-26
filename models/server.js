@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors";
+import fileUpload from "express-fileupload";
 
 import { router } from "../routes/user.js";
 import { dbConnection } from "../database/config.js";
@@ -7,6 +8,7 @@ import { routerAuth } from "../routes/auth.js";
 import { routerCategorias } from "../routes/categorias.js";
 import { routerProductos } from "../routes/productos.js";
 import { routerBuscar } from "../routes/buscar.js";
+import { routerUpload } from "../routes/uploads.js";
 
 class Server {
 
@@ -15,11 +17,12 @@ class Server {
         this.port = process.env.PORT;
 
         this.paths = {
-            usuariosPath: '/api/users',
             authPath: '/api/auth',
+            buscarPath: '/api/buscar',
             categoriasPath: '/api/categorias',
             productosPath: '/api/productos',
-            buscarPath: '/api/buscar'
+            uploadPath: '/api/uploads',
+            usuariosPath: '/api/users',
         }
 
         // Conexión a base de datos (mongo)
@@ -45,6 +48,13 @@ class Server {
 
         // public
         this.app.use( express.static('public'));
+
+        // FileUpload - Carga de archivos
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath: true
+        }));
     }
 
     routes() {
@@ -53,6 +63,7 @@ class Server {
         this.app.use(this.paths.categoriasPath, routerCategorias);
         this.app.use(this.paths.productosPath, routerProductos);
         this.app.use(this.paths.buscarPath, routerBuscar);
+        this.app.use(this.paths.uploadPath, routerUpload);
     }
 
     listen() {

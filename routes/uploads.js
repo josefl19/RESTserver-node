@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { check } from "express-validator";
 
-import { actualizarImg, cargarArchivo } from "../controllers/uploads.js";
+import { actualizarImg, actualizarImgCloudinary, cargarArchivo, mostrarImagen } from "../controllers/uploads.js";
 
 import { coleccionesPermitidas } from "../helpers/db-validators.js";
 
@@ -17,6 +17,12 @@ routerUpload.put('/:coleccion/:id', [
         check('id', 'No es un ID válido').isMongoId(),
         check('coleccion').custom( c => coleccionesPermitidas( c, ['usuarios', 'productos'] )),
         validarCampos
-    ], actualizarImg)
+    ], actualizarImgCloudinary );
+
+routerUpload.get('/:coleccion/:id', [
+        check('id', 'No es un ID válido').isMongoId(),
+        check('coleccion').custom( c => coleccionesPermitidas( c, ['usuarios', 'productos'] )),
+        validarCampos
+    ], mostrarImagen );
 
 export { routerUpload }
